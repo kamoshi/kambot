@@ -52,7 +52,16 @@ class YTDLSource(discord.PCMVolumeTransformer):
         filename = data['url'] if stream else cls.ytdl.prepare_filename(data)
         return cls(discord.FFmpegPCMAudio(filename, **cls.FFMPEG_OPTIONS), data=data)
 
+    @classmethod
+    async def from_query_get_link(cls, query: str, *, loop=None) -> str:
+        loop = loop or asyncio.get_event_loop()
+        data = await loop.run_in_executor(None, lambda: cls.ytdl.extract_info(query, download=False))
 
+        if 'entries' in data:
+            # take first item from a playlist
+            data = data['entries'][0]
+
+        return data['webpage_url']
 
 
 class Music(commands.Cog):
@@ -92,6 +101,16 @@ class Music(commands.Cog):
             await ctx.voice_client.disconnect()
         else:
             await ctx.send("Bot isn't in any voice chat already.")
+
+    @commands.command()
+    async def yt(self, ctx: Context, *, args: str) -> None:
+        """Search for video link on youtube"""
+
+        link = await YTDLSource.from_query_get_link(args)
+        if link is not None:
+            return await ctx.send(link)
+        
+        await ctx.send("Couldn't find any videos")
 
 
 
