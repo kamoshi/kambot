@@ -1,12 +1,10 @@
 import discord
-import os
 import config
 
 from discord.ext.commands import Bot
 from music import Music
 
 bot = Bot(command_prefix=']')
-token = os.environ.get('KAMBOT')
 
 @bot.command()
 async def hi(ctx):
