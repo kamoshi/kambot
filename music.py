@@ -3,6 +3,7 @@ import discord
 import youtube_dl
 
 from discord.ext import commands
+from discord.ext.commands import Context
 
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -61,11 +62,10 @@ class Music(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def join(self, ctx: commands.Context):
+    async def join(self, ctx: Context):
         """Joins a voice channel"""
         if ctx.author.voice:
             channel = ctx.author.voice.channel
-            await ctx.message.add_reaction("☑️")
             
             if ctx.voice_client is not None:
                 return await ctx.voice_client.move_to(channel)
@@ -76,7 +76,7 @@ class Music(commands.Cog):
 
 
     @commands.command()
-    async def play(self, ctx, *, url):
+    async def play(self, ctx: Context, *, url: str):
         """Plays from a url (almost anything youtube_dl supports)"""
 
         async with ctx.typing():
@@ -84,4 +84,16 @@ class Music(commands.Cog):
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
         await ctx.send('Now playing: {}'.format(player.title))
+
+
+    @commands.command()
+    async def stop(self, ctx: Context):
+        """Quit voice chat (in the future clear queue too)"""
+
+        if ctx.voice_client is not None:
+            await ctx.voice_client.disconnect()
+        else:
+            await ctx.send("Bot isn't in any voice chat already.")
+
+
 
