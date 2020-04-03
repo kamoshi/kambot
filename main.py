@@ -1,5 +1,6 @@
 import discord
 import os
+import config
 
 from discord.ext.commands import Bot
 from music import Music
@@ -17,4 +18,4 @@ async def on_ready():
     print('------')
 
 bot.add_cog(Music(bot))
-bot.run(token)
+bot.run(config.token)
