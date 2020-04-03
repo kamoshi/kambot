@@ -2,7 +2,6 @@ import discord
 import config
 from music import Music
 from core import Core
-
 from discord.ext.commands import Bot
 
 bot = Bot(command_prefix=',')
