@@ -231,9 +231,6 @@ class Music(commands.Cog):
         if not ctx.voice_client:  # if not in voice chat, join
             await ctx.invoke(self.join, ctx)
 
-        if ctx.voice_client.is_playing():
-            ctx.voice_client.stop()
-
         async with ctx.typing():
             song = await YTDLSource.from_url(ctx, url, loop=self.bot.loop, stream=True)
             voice_state = self.get_voice_state(ctx)
