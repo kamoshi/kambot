@@ -9,8 +9,8 @@ from discord.ext.commands import Context
 # Suppress noise about console usage from errors
 youtube_dl.utils.bug_reports_message = lambda: ''
 
-
-
+class PlaybackException(Exception):
+    pass
 
 class YTDLSource(discord.PCMVolumeTransformer):
     """
@@ -166,7 +166,7 @@ class VoiceState:
     def play_next_song(self, error=None):
         """This function should be a callback after a song is finished"""
         if error:
-            raise commands.DiscordException("Playback finished with an error: %s" % str(error))
+            raise PlaybackException("Playback finished with an error: %s" % str(error))
         self.finished.set()  # Set the finished flag to True
 
     async def skip_song(self):
