@@ -7,3 +7,6 @@ class Core(commands.Cog):
     @commands.command()
     async def hi(self, ctx):
         await ctx.send("Hello, %s!" % ctx.author.name)
+
+def setup(bot):
+    bot.add_cog(Core(bot))

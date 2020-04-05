@@ -304,3 +304,7 @@ class Music(commands.Cog):
 
         if ctx.voice_client is None:
             raise commands.CommandError("Bot is not connected to any voice channel")
+
+
+def setup(bot):
+    bot.add_cog(Music(bot))

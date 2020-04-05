@@ -1,11 +1,14 @@
+import os
 import discord
 import config
+
 from kambot import Kambot
-from cogs import core, music
 
 bot = Kambot(command_prefix=',')
 
-bot.add_cog(core.Core(bot))
-bot.add_cog(music.Music(bot))
+# Load cogs
+bot.load_extension("cogs.core")
+bot.load_extension("cogs.polls")
+#bot.load_extension("cogs.music")
 
 bot.run(config.token)
