@@ -9,6 +9,6 @@ bot = Kambot(command_prefix=',')
 # Load cogs
 bot.load_extension("cogs.core")
 bot.load_extension("cogs.polls")
-#bot.load_extension("cogs.music")
+bot.load_extension("cogs.youtube")
 
-bot.run(config.token)
+bot.run(config.TOKEN)
