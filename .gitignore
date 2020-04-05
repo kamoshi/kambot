@@ -111,6 +111,7 @@ ENV/
 
 # Logfiles
 log.*
+nohup.out
 
 # Custom user configuration
 config.yml
