@@ -32,7 +32,7 @@ class Youtube(commands.Cog):
         
         # Providing the message
         p = Pagination(ctx, pages)
-        self.bot.loop.create_task(p.handle_message())
+        p.create_task()
                     
 
     @youtube.error
