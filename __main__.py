@@ -1,9 +1,10 @@
-import os
+import logging
 import discord
-import config
 
+import config
 from kambot import Kambot
 
+logging.basicConfig(level=logging.INFO)
 bot = Kambot(command_prefix=',')
 
 # Load cogs
