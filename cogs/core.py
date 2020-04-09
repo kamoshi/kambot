@@ -26,5 +26,43 @@ class Core(commands.Cog):
         embed.set_image(url=arg.avatar_url)
         await ctx.send(embed=embed)
 
+
+    # MOD COMMANDS
+
+    @commands.command(aliases=["roles"])
+    @commands.has_permissions(manage_guild=True)
+    @commands.bot_has_permissions(manage_roles=True)
+    async def role(self, ctx, member: discord.Member, *role_names: tuple):
+        if not member:
+            return await ctx.send("Couldn't find any member with this nickname")
+        
+        member_roles = member.roles
+        string = "{}: ".format(member.display_name)
+        for role_name in role_names:
+            role = discord.utils.get(ctx.guild.roles, name=''.join(role_name))
+            if role in member_roles:
+                await member.remove_roles(role)
+                string += "-{} ".format(role.name)
+            else:
+                await member.add_roles(role)
+                string += "+{} ".format(role.name)
+
+        await ctx.send(string)
+
+
+    # OWNER COMMANDS
+
+    @commands.is_owner
+    @commands.command(hidden=True)
+    async def botstatus(self, ctx: commands.Context, *, new_status: str):
+        activity=discord.Activity(name=new_status, type=discord.ActivityType.playing)
+        await self.bot.change_presence(activity)
+
+    @commands.is_owner
+    @commands.command(hidden=True)
+    async def botname(self, ctx: commands.Context, *, new_name: str):
+        await self.bot.user.edit(username=new_name)
+
+
 def setup(bot):
     bot.add_cog(Core(bot))
