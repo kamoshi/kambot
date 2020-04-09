@@ -4,7 +4,7 @@ Commands in this module:
  - TODO: pfp
  - TODO: info
 """
-
+import time
 import discord
 from discord.ext import commands
 
@@ -15,6 +15,39 @@ class Core(commands.Cog):
     @commands.command()
     async def hi(self, ctx):
         await ctx.send("Hello, %s!" % ctx.author.name)
+
+    @commands.command()
+    async def info(self, ctx):
+        """Display information about this bot"""
+
+        def humanize_time(secs):
+            mins, secs = divmod(secs, 60)
+            hours, mins = divmod(mins, 60)
+            return '%02d:%02d:%02d' % (hours, mins, secs)
+
+        embed = discord.Embed(
+            title=self.bot.user.name,
+            color=discord.Color.blurple()
+        )
+        embed.add_field(name="Uptime", value=humanize_time(int(time.time()-self.bot.init_time)), inline=True)
+        embed.add_field(name="Latency", value="{} ms".format(int(self.bot.latency*100)), inline=True)
+        embed.add_field(name="Guilds", value=len(self.bot.guilds), inline=True)
+        embed.add_field(name="Users", value=len(self.bot.users), inline=True)
+        embed.add_field(name="Github", value="https://github.com/kamoshi/kambot", inline=False)
+
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=["guild"])
+    async def server(self, ctx: commands.Context):
+        guild: discord.Guild = ctx.guild
+        embed=discord.Embed(
+            title=guild.name
+        )
+        embed.set_thumbnail(url=guild.icon_url)
+        embed.add_field(name="Members", value=guild.member_count)
+        await ctx.send(embed=embed)
+
+        
 
     @commands.command(aliases=["pfp"])
     async def avatar(self, ctx: commands.Context, *, arg: discord.Member):
