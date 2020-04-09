@@ -30,7 +30,7 @@ class Core(commands.Cog):
     # MOD COMMANDS
 
     @commands.command(aliases=["roles"])
-    @commands.has_permissions(manage_guild=True)
+    @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(manage_roles=True)
     async def role(self, ctx, member: discord.Member, *role_names: tuple):
         if not member:
