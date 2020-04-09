@@ -10,4 +10,4 @@ class Kambot(Bot):
     async def on_ready(self):
         print('Logged in as {0} ({0.id})'.format(self.user))
         print('------')
-        self.change_presence(activity=discord.Activity(name="to music", type=discord.ActivityType.listening))
+        await self.change_presence(activity=discord.Activity(name=",help :)", type=discord.ActivityType.playing))
