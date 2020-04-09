@@ -52,13 +52,13 @@ class Core(commands.Cog):
 
     # OWNER COMMANDS
 
-    @commands.is_owner
+    @commands.is_owner()
     @commands.command(hidden=True)
     async def botstatus(self, ctx: commands.Context, *, new_status: str):
         activity=discord.Activity(name=new_status, type=discord.ActivityType.playing)
-        await self.bot.change_presence(activity)
+        await self.bot.change_presence(activity=activity)
 
-    @commands.is_owner
+    @commands.is_owner()
     @commands.command(hidden=True)
     async def botname(self, ctx: commands.Context, *, new_name: str):
         await self.bot.user.edit(username=new_name)
