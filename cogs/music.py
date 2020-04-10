@@ -11,6 +11,7 @@ import traceback
 from async_timeout import timeout
 from functools import partial
 from youtube_dl import YoutubeDL
+from modules.utils import humanize_time
 
 
 ytdlopts = {
@@ -53,6 +54,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.title = data.get('title')
         self.web_url = data.get('webpage_url')
         self.duration = data.get('duration')
+        self.video_id = data.get('id')
 
         # YTDL info dicts (data) have other useful information you might want
         # https://github.com/rg3/youtube-dl/blob/master/README.md
@@ -152,8 +154,17 @@ class MusicPlayer(commands.Cog):
             self.current = source
 
             self._guild.voice_client.play(source, after=lambda _: self.bot.loop.call_soon_threadsafe(self.next.set))
-            self.np = await self._channel.send(f'**Now Playing:** `{source.title}` requested by '
-                                               f'`{source.requester}`')
+            
+            # Compose embed
+            embed = discord.Embed(
+                title="Now playing",
+                description=f"[**{source.title}**]({source.web_url})"
+            )
+            embed.add_field(name="Requested by", value=source.requester, inline=True)
+            embed.add_field(name="Duration", value=humanize_time(source.duration), inline=True)
+            embed.set_thumbnail(url=f"https://img.youtube.com/vi/{source.video_id}/mqdefault.jpg")
+            self.np = await self._channel.send(embed=embed)
+
             await self.next.wait()
 
             # Make sure the FFmpeg process is cleaned up.
@@ -364,9 +375,14 @@ class Music(commands.Cog):
         except discord.HTTPException:
             pass
         
-        # TODO: EMBED
-        player.np = await ctx.send(f'**Now Playing:** `{vc.source.title}` '
-                                   f'requested by `{vc.source.requester}`')
+        embed = discord.Embed(
+            title="Now playing",
+            description=f"[**{vc.source.title}**]({vc.source.web_url})"
+        )
+        embed.add_field(name="Requested by", value=vc.source.requester, inline=True)
+        embed.add_field(name="Duration", value=humanize_time(vc.source.duration), inline=True)
+        embed.set_thumbnail(url=f"https://img.youtube.com/vi/{vc.source.video_id}/mqdefault.jpg")
+        player.np = await ctx.send(embed=embed)
 
     @commands.command(name='volume')
     async def change_volume(self, ctx, *, vol: float):

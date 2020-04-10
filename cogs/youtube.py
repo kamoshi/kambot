@@ -1,6 +1,6 @@
 import asyncio
 import discord
-import modules.youtube as yt
+from modules.api import get_youtube_videos
 
 from discord.ext import commands
 from modules.pagination import Pagination
@@ -15,7 +15,7 @@ class Youtube(commands.Cog):
         """Search for a youtube video"""
 
         async with ctx.channel.typing():
-            data = await yt.get_youtube_videos(query, 5)
+            data = await get_youtube_videos(query, 5)
 
             if not data:
                 return await ctx.send("Couldn't retrieve any data.")

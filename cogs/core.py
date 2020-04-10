@@ -1,6 +1,7 @@
 import time
 import discord
 from discord.ext import commands
+from modules.utils import humanize_time
 
 class Core(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -15,11 +16,6 @@ class Core(commands.Cog):
     @commands.command()
     async def info(self, ctx):
         """Display information about this bot."""
-
-        def humanize_time(secs):
-            mins, secs = divmod(secs, 60)
-            hours, mins = divmod(mins, 60)
-            return '%02d:%02d:%02d' % (hours, mins, secs)
 
         embed = discord.Embed(
             title=self.bot.user.name,
