@@ -1,9 +1,3 @@
-"""
-Commands in this module:
- - hi
- - TODO: pfp
- - TODO: info
-"""
 import time
 import discord
 from discord.ext import commands
@@ -49,6 +43,7 @@ class Core(commands.Cog):
         )
         embed.set_thumbnail(url=guild.icon_url)
         embed.add_field(name="Members", value=guild.member_count)
+        # TODO: Expand with more information
         await ctx.send(embed=embed)
 
         
