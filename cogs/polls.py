@@ -34,6 +34,8 @@ class Polls(commands.Cog):
 
     @commands.command()
     async def createpoll(self, ctx: commands.Context, name: str, *options):
+        """Create a poll."""
+
         if ctx.guild.id in self.polls:
             return await ctx.send("ERROR: Poll already exists for this server: %s" % self.polls[ctx.guild.id].name)
 
@@ -49,6 +51,8 @@ class Polls(commands.Cog):
 
     @commands.command()
     async def votepoll(self, ctx: commands.Context, option: str):
+        """Vote in a poll."""
+
         vote = 0
         try:
             vote = int(option)
@@ -66,12 +70,16 @@ class Polls(commands.Cog):
     
     @commands.command()
     async def deletepoll(self, ctx: commands.Context):
+        """Delete poll."""
+
         poll_name = self.polls[ctx.guild.id].name
         del self.polls[ctx.guild.id]
         await ctx.send("Deleted poll \"%s\"" % poll_name)
 
     @commands.command()
     async def showpoll(self, ctx: commands.Context):
+        """Display results of a poll."""
+
         poll: Poll = self.polls[ctx.guild.id]  # grab the poll in question
         
         results = [0] * poll.number_options()  # storage for results, index is option

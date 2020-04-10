@@ -14,11 +14,13 @@ class Core(commands.Cog):
 
     @commands.command()
     async def hi(self, ctx):
+        """Say hi to the bot."""
+
         await ctx.send("Hello, %s!" % ctx.author.name)
 
     @commands.command()
     async def info(self, ctx):
-        """Display information about this bot"""
+        """Display information about this bot."""
 
         def humanize_time(secs):
             mins, secs = divmod(secs, 60)
@@ -39,6 +41,8 @@ class Core(commands.Cog):
 
     @commands.command(aliases=["guild"])
     async def server(self, ctx: commands.Context):
+        """Display information about this discord server."""
+
         guild: discord.Guild = ctx.guild
         embed=discord.Embed(
             title=guild.name
@@ -50,7 +54,18 @@ class Core(commands.Cog):
         
 
     @commands.command(aliases=["pfp"])
-    async def avatar(self, ctx: commands.Context, *, arg: discord.Member):
+    async def avatar(self, ctx: commands.Context, *, arg: discord.Member=None):
+        """Display someone's profile picture.
+
+        Parameters
+        ------------
+        search: discord.Member [Optional]
+            The person whose avatar bot should display. If no one's name is provided bot display command
+            author's avatar instead.
+        """
+        if arg is None:
+            arg = ctx.author
+
         embed: discord.Embed = discord.Embed(
             color=discord.Color.blurple(),
             description="[link]({})".format(arg.avatar_url),
