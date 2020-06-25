@@ -11,6 +11,6 @@ bot = Kambot(command_prefix=',')
 bot.load_extension("cogs.core")
 bot.load_extension("cogs.fun")
 bot.load_extension("cogs.polls")
-bot.load_extension("cogs.youtube")
+bot.load_extension("cogs.webapi")
 
 bot.run(config.TOKEN)

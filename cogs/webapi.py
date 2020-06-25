@@ -1,11 +1,11 @@
 import asyncio
 import discord
-from modules.api import get_youtube_videos
+from modules.api import get_youtube_videos, get_touhouwiki_query
 
 from discord.ext import commands
 from modules.pagination import Pagination
 
-class Youtube(commands.Cog):
+class WebApi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -33,7 +33,32 @@ class Youtube(commands.Cog):
         # Providing the message
         p = Pagination(ctx, pages)
         p.create_task()
-                    
+
+
+    @commands.command(aliases=["thw"])
+    @commands.cooldown(1, 2, commands.cooldowns.BucketType.guild)
+    async def touhouwiki(self, ctx: commands.Context, *, query: str):
+        """Search a page on the touhou wiki"""
+
+        async with ctx.channel.typing():
+            data = await get_touhouwiki_query(query)
+
+            if not data:
+                return await ctx.send("Couldn't retrieve any data.")
+
+        if not "query" in data:
+            return await ctx.send("Couldn't find any results for this query.")
+
+        item_container = data["query"]["pages"] # container with found pages
+                
+        pages = [] # message pages will be stored here
+        for item in item_container:
+            pages.append(item_container[item]["fullurl"])
+        
+        # Providing the message
+        p = Pagination(ctx, pages)
+        p.create_task()
+
 
     @youtube.error
     async def youtube_error(self, ctx, error):
@@ -42,5 +67,5 @@ class Youtube(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Youtube(bot))
+    bot.add_cog(WebApi(bot))
 
