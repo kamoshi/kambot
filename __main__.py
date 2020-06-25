@@ -12,6 +12,5 @@ bot.load_extension("cogs.core")
 bot.load_extension("cogs.fun")
 bot.load_extension("cogs.polls")
 bot.load_extension("cogs.youtube")
-bot.load_extension("cogs.music")
 
 bot.run(config.TOKEN)
